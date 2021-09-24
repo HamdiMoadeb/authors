@@ -1,0 +1,1 @@
+enum AuthorEvents { fetchAuthors }
