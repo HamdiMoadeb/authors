@@ -24,37 +24,50 @@ class _AuthorsPageState extends State<AuthorsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _body(),
+      appBar: AppBar(
+        title: Text('Best Authors'),
+        centerTitle: true,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BlocBuilder<AuthorBloc, AuthorState>(
+              builder: (BuildContext context, AuthorState state) {
+            if (state is AuthorErrorState) {
+              final error = state.error;
+              return Text(error.message);
+            }
+            if (state is AuthorLoadedState) {
+              List<Author> authors = state.authors;
+              return list(authors);
+            }
+            return Center(child: CircularProgressIndicator());
+          }),
+        ],
+      ),
     );
   }
 
-  _body() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        BlocBuilder<AuthorBloc, AuthorState>(
-            builder: (BuildContext context, AuthorState state) {
-          if (state is AuthorErrorState) {
-            final error = state.error;
-            return Text(error.message);
-          }
-          if (state is AuthorLoadedState) {
-            List<Author> authors = state.authors;
-            return _list(authors);
-          }
-          return Center(child: CircularProgressIndicator());
-        }),
-      ],
-    );
-  }
-
-  Widget _list(List<Author> authors) {
+  Widget list(List<Author> authors) {
     return Expanded(
       child: ListView.builder(
         itemCount: authors.length,
         itemBuilder: (_, index) {
           Author author = authors[index];
-          return Text(author.name);
+          return Card(
+            margin: EdgeInsets.all(5),
+            child: ListTile(
+              title: Text(author.name),
+              subtitle: Text(author.email),
+              trailing: Icon(Icons.keyboard_arrow_right_rounded),
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
+                  author.avatarUrl,
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
