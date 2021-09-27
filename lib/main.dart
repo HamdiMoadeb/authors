@@ -1,4 +1,4 @@
-import 'package:authers/bloc/author/authorBlock.dart';
+import 'package:authers/bloc/author/authorBloc.dart';
 import 'package:authers/repositories/authorRepository.dart';
 import 'package:authers/repositories/author_api_client.dart';
 import 'package:authers/views/authorsPage.dart';
