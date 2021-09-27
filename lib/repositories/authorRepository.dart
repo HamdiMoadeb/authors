@@ -5,8 +5,7 @@ import 'package:flutter/cupertino.dart';
 class AuthorRepository {
   final AuthorApiClient authorApiClient;
 
-  AuthorRepository({@required this.authorApiClient})
-      : assert(authorApiClient != null);
+  AuthorRepository({@required this.authorApiClient});
 
   Future<List<Author>> fetchAuthors() async {
     return await authorApiClient.getAllAuthors();

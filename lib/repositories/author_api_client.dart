@@ -18,6 +18,7 @@ class AuthorApiClient {
         authors.add(Author.fromJson(athr));
       }
     } else {
+      print('${response.body}');
       throw Exception('error getting authors');
     }
 

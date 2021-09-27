@@ -6,9 +6,15 @@ class AuthorState extends Equatable {
   List<Object> get props => [];
 }
 
-class AuthorLoadingState extends AuthorState {}
+class AuthorLoadingState extends AuthorState {
+  @override
+  String toString() => 'AuthorLoadingState';
+}
 
-class AuthorInitialState extends AuthorState {}
+class AuthorInitialState extends AuthorState {
+  @override
+  String toString() => 'AuthorInitialState';
+}
 
 class AuthorLoadedState extends AuthorState {
   final List<Author> authors;

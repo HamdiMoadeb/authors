@@ -10,11 +10,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthorBloc extends Bloc<AuthorEvents, AuthorState> {
   AuthorRepository authorRepository;
   List<Author> authorsList = [];
+
   AuthorBloc({@required this.authorRepository}) : super(AuthorInitialState());
 
   @override
-  Stream<AuthorState> onEvent(AuthorEvents event) async* {
-    super.onEvent(event);
+  Stream<AuthorState> mapEventToState(AuthorEvents event) async* {
     if (event == AuthorEvents.fetchAuthors) {
       yield AuthorLoadingState();
       try {
