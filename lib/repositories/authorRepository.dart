@@ -1,5 +1,5 @@
 import 'package:authers/models/author.dart';
-import 'package:authers/repositories/author_api_client.dart';
+import 'package:authers/repositories/authorApiClient.dart';
 import 'package:flutter/cupertino.dart';
 
 class AuthorRepository {

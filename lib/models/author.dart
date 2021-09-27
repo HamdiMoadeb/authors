@@ -14,7 +14,7 @@ class Author extends Equatable {
 
   static Author fromJson(dynamic json) {
     return Author(
-      id: json['_id'],
+      id: json['id'],
       name: json['name'],
       userName: json['userName'],
       email: json['email'],

@@ -1,7 +1,10 @@
 import 'package:authers/bloc/author/authorBloc.dart';
 import 'package:authers/bloc/author/authorEvents.dart';
 import 'package:authers/bloc/author/authorState.dart';
+import 'package:authers/bloc/post/postBloc.dart';
 import 'package:authers/models/author.dart';
+import 'package:authers/repositories/postApiClient.dart';
+import 'package:authers/repositories/postRepository.dart';
 import 'package:authers/views/authorDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,11 +28,18 @@ class _AuthorsPageState extends State<AuthorsPage> {
   toDetailsPage(Author author) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => AuthorDetailsPage(
-          author: author,
-        ),
-      ),
+      MaterialPageRoute(builder: (BuildContext ctx) {
+        return BlocProvider(
+          create: (ctx) => PostBloc(
+            postRepository: PostRepository(
+              postApiClient: PostApiClient(),
+              authorId: author.id.toString(),
+              page: '1',
+            ),
+          ),
+          child: AuthorDetailsPage(author: author),
+        );
+      }),
     );
   }
 

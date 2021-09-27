@@ -1,6 +1,6 @@
 import 'package:authers/bloc/author/authorBloc.dart';
+import 'package:authers/repositories/authorApiClient.dart';
 import 'package:authers/repositories/authorRepository.dart';
-import 'package:authers/repositories/author_api_client.dart';
 import 'package:authers/views/authorsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

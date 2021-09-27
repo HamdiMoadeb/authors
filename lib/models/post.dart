@@ -21,7 +21,7 @@ class Post extends Equatable {
 
   static Post fromJson(dynamic json) {
     return Post(
-      id: json['_id'],
+      id: json['id'],
       date: json['date'],
       title: json['title'],
       body: json['body'],
