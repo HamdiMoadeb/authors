@@ -5,14 +5,12 @@ import 'package:flutter/cupertino.dart';
 class PostRepository {
   final PostApiClient postApiClient;
   final String authorId;
-  final String page;
+  final BuildContext context;
 
   PostRepository(
-      {@required this.postApiClient,
-      @required this.authorId,
-      @required this.page});
+      {@required this.postApiClient, @required this.authorId, this.context});
 
   Future<List<Post>> fetchPosts() async {
-    return await postApiClient.getAllPosts(authorId, page);
+    return await postApiClient.getAllPosts(authorId, context);
   }
 }

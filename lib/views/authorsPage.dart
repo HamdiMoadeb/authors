@@ -5,9 +5,11 @@ import 'package:authers/bloc/post/postBloc.dart';
 import 'package:authers/models/author.dart';
 import 'package:authers/repositories/postApiClient.dart';
 import 'package:authers/repositories/postRepository.dart';
+import 'package:authers/utils/appData.dart';
 import 'package:authers/views/authorDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class AuthorsPage extends StatefulWidget {
   @override
@@ -26,6 +28,7 @@ class _AuthorsPageState extends State<AuthorsPage> {
   }
 
   toDetailsPage(Author author) {
+    Provider.of<AppData>(context, listen: false).updatePage(1);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (BuildContext ctx) {
@@ -34,7 +37,7 @@ class _AuthorsPageState extends State<AuthorsPage> {
             postRepository: PostRepository(
               postApiClient: PostApiClient(),
               authorId: author.id.toString(),
-              page: '1',
+              context: context,
             ),
           ),
           child: AuthorDetailsPage(author: author),

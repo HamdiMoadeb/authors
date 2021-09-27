@@ -3,9 +3,12 @@ import 'package:authers/bloc/post/postEvents.dart';
 import 'package:authers/bloc/post/postState.dart';
 import 'package:authers/models/author.dart';
 import 'package:authers/models/post.dart';
+import 'package:authers/models/postsPagination.dart';
+import 'package:authers/utils/appData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class AuthorDetailsPage extends StatefulWidget {
   Author author;
@@ -20,6 +23,8 @@ class _AuthorDetailsPageState extends State<AuthorDetailsPage> {
     context.read<PostBloc>().add(PostEvents.fetchPosts);
   }
 
+  PostPagination pagination;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +33,7 @@ class _AuthorDetailsPageState extends State<AuthorDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    pagination = Provider.of<AppData>(context).postPagination;
     return Scaffold(
       body: Stack(
         children: [
@@ -93,22 +99,65 @@ class _AuthorDetailsPageState extends State<AuthorDetailsPage> {
                   List<Post> posts = state.posts;
                   return list(posts);
                 }
-                return Center(child: CircularProgressIndicator());
+                return Container(
+                  height: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  (pagination != null && pagination.canPrev)
+                      ? TextButton(
+                          child: Text('Prev'),
+                          onPressed: () {
+                            int currentPage =
+                                Provider.of<AppData>(context, listen: false)
+                                        .currentPage -
+                                    1;
+                            Provider.of<AppData>(context, listen: false)
+                                .updatePage(currentPage);
+                            loadPosts();
+                          },
+                        )
+                      : Container(),
+                  (pagination != null && pagination.canNext)
+                      ? TextButton(
+                          child: Text('Next'),
+                          onPressed: () {
+                            int currentPage =
+                                Provider.of<AppData>(context, listen: false)
+                                        .currentPage +
+                                    1;
+                            Provider.of<AppData>(context, listen: false)
+                                .updatePage(currentPage);
+                            loadPosts();
+                          },
+                        )
+                      : Container(),
+                ],
+              )
             ],
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * .20,
-            alignment: Alignment.topCenter,
-            margin:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height * .20),
-            child: Center(
-              child: CircleAvatar(
-                radius: 74,
-                backgroundColor: Colors.white,
+          GestureDetector(
+            onTap: () {
+              print(pagination);
+            },
+            child: Container(
+              height: MediaQuery.of(context).size.height * .20,
+              alignment: Alignment.topCenter,
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * .20),
+              child: Center(
                 child: CircleAvatar(
-                  radius: 70,
-                  backgroundImage: NetworkImage(widget.author.avatarUrl),
+                  radius: 74,
+                  backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                    radius: 70,
+                    backgroundImage: NetworkImage(widget.author.avatarUrl),
+                  ),
                 ),
               ),
             ),
@@ -126,9 +175,53 @@ class _AuthorDetailsPageState extends State<AuthorDetailsPage> {
           Post post = posts[index];
           return Card(
             margin: EdgeInsets.all(5),
-            child: ListTile(
-              title: Text(post.title),
-              trailing: Icon(Icons.keyboard_arrow_right_rounded),
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  width: 110,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(post.imageUrl),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  width: MediaQuery.of(context).size.width - 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.title.trim(),
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        post.body,
+                        textAlign: TextAlign.start,
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           );
         },

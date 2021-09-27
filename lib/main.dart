@@ -1,9 +1,11 @@
 import 'package:authers/bloc/author/authorBloc.dart';
 import 'package:authers/repositories/authorApiClient.dart';
 import 'package:authers/repositories/authorRepository.dart';
+import 'package:authers/utils/appData.dart';
 import 'package:authers/views/authorsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
@@ -33,17 +35,20 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: BlocProvider(
-        create: (context) => AuthorBloc(
-            authorRepository:
-                AuthorRepository(authorApiClient: AuthorApiClient())),
-        //AuthorBloc(),
-        child: AuthorsPage(),
+    return ChangeNotifierProvider(
+      create: (context) => AppData(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.teal,
+        ),
+        home: BlocProvider(
+          create: (context) => AuthorBloc(
+              authorRepository:
+                  AuthorRepository(authorApiClient: AuthorApiClient())),
+          //AuthorBloc(),
+          child: AuthorsPage(),
+        ),
       ),
     );
   }
